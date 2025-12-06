@@ -1,0 +1,8 @@
+.env
+secrets.robot
+log.html
+output.xml
+report.html
+__pycache__/
+venv/
+log/

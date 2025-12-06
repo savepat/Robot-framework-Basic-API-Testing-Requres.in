@@ -1,0 +1,8 @@
+robotframework==7.0
+robotframework-requests==0.9.6
+requests==2.31.0
+urllib3==2.1.0
+
+robotframework-seleniumlibrary==6.2.0
+selenium==4.15.2
+webdriver-manager==4.0.1
