@@ -17,15 +17,15 @@ Validate_get_user_details
     ${resp}=    GET On Session    reqres_session    /api/users/2
     Status Should Be    200    ${resp}
     
-    Log To Console     status:${resp.status_code}
-    Log To Console     ${resp.reason}
-    Log To Console     ${resp.json()}
-    
     ${json_file_path}=    Catenate    SEPARATOR=/    ${CURDIR}    ..    TestData    ${userdata_2_json_file_name}
     ${json_file_content}=    OperatingSystem.Get File    ${json_file_path}
     ${json_file_content_json}=    Evaluate    json.loads('''${json_file_content}''')    json
     Log    ${json_file_content_json}
     Dictionaries Should Be Equal    ${resp.json()['data']}    ${json_file_content_json['data']}
+
+    Log To Console     status:${resp.status_code}
+    Log To Console     ${resp.reason}
+    Log To Console     ${resp.json()}
 
 Validate_create_user_details
     ${headers}=    Create Dictionary    x-api-key=${API_KEY}    Content-Type=application/json
@@ -36,12 +36,6 @@ Validate_create_user_details
     ${json_file_content_body}=    Evaluate    json.loads('''${json_file_content}''')    json
 
     ${response_obj}=    POST On Session    reqes_create_session    /api/users    json=${json_file_content_body}
-
-    Log To Console    status: ${response_obj.status_code}
-    Log To Console    reason: ${response_obj.reason}
-    Log To Console    text: ${response_obj.text}
-    Log To Console    request.headers: ${response_obj.request.headers}
-    Log To Console    request.body: ${response_obj.request.body}
 
     Status Should Be    201    ${response_obj}
 
@@ -60,7 +54,12 @@ Validate_create_user_details
     Run Keyword And Ignore Error    Remove From Dictionary    ${expected_response}    createdAt
 
     Dictionaries Should Be Equal    ${actual_response}    ${expected_response}
-
+    
+    Log To Console    status: ${response_obj.status_code}
+    Log To Console    reason: ${response_obj.reason}
+    Log To Console    text: ${response_obj.text}
+    Log To Console    request.headers: ${response_obj.request.headers}
+    Log To Console    request.body: ${response_obj.request.body}
 
 *** Test Cases ***
 Validate_PUT_update_user
