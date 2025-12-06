@@ -27,7 +27,7 @@ Validate_get_user_details
     Log    ${json_file_content_json}
     Dictionaries Should Be Equal    ${resp.json()['data']}    ${json_file_content_json['data']}
 
-Validate_create_user_debug
+Validate_create_user_details
     ${headers}=    Create Dictionary    x-api-key=${API_KEY}    Content-Type=application/json
     Create Session    reqes_create_session    ${BASE_URL}    headers=${headers}    verify=True
 
@@ -44,6 +44,23 @@ Validate_create_user_debug
     Log To Console    request.body: ${response_obj.request.body}
 
     Status Should Be    201    ${response_obj}
+
+    ${actual_response}=    Set Variable    ${response_obj.json()}
+    Dictionary Should Contain Key    ${actual_response}    id
+    Dictionary Should Contain Key    ${actual_response}    createdAt
+
+    Remove From Dictionary    ${actual_response}    id
+    Remove From Dictionary    ${actual_response}    createdAt
+
+    ${json_file_path}=    Catenate    SEPARATOR=/    ${CURDIR}    ..    TestData    ${Create_User_Response_File}
+    ${json_file_content}=    OperatingSystem.Get File    ${json_file_path}
+    ${expected_response}=    Evaluate    json.loads('''${json_file_content}''')    json
+
+    Run Keyword And Ignore Error    Remove From Dictionary    ${expected_response}    id
+    Run Keyword And Ignore Error    Remove From Dictionary    ${expected_response}    createdAt
+
+    Dictionaries Should Be Equal    ${actual_response}    ${expected_response}
+
 
 *** Test Cases ***
 Validate_PUT_update_user
