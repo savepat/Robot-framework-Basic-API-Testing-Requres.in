@@ -85,6 +85,10 @@ Validate_PUT_update_user
     ${json_file_content}=    OperatingSystem.Get File    ${json_file_path}
     ${expected_response}=    Evaluate    json.loads('''${json_file_content}''')    json
 
+    Run Keyword And Ignore Error    Remove From Dictionary    ${expected_response}    updatedAt
+
+    Dictionaries Should Be Equal    ${actual_response}    ${expected_response}
+
     Log To Console    status: ${response_obj.status_code}
     Log To Console    reason: ${response_obj.reason}
     Log To Console    response.text: ${response_obj.text}
@@ -112,6 +116,10 @@ Validate_Patch_update_user
     ${json_file_path}=    Catenate    SEPARATOR=/    ${CURDIR}    ..    TestData    ${UpdateP_User_Response_File}
     ${json_file_content}=    OperatingSystem.Get File    ${json_file_path}
     ${expected_response}=    Evaluate    json.loads('''${json_file_content}''')    json
+
+    Run Keyword And Ignore Error    Remove From Dictionary    ${expected_response}    updatedAt
+
+    Dictionaries Should Be Equal    ${actual_response}    ${expected_response}
 
     Log To Console    status: ${response_obj.status_code}
     Log To Console    reason: ${response_obj.reason}
